@@ -10,13 +10,14 @@ for an isothermal fluid
 
 """
 
+from numba import jit
 
-
+#@jit(nopython = False, cache=True)
 def main():
 	""" Lattice Boltzmann Simulation """
 	
 	# Simulation parameters
-	Nx                     = 400    # resolution x-dir
+	Nx                     = 100    # resolution x-dir
 	Ny                     = 100    # resolution y-dir
 	rho0                   = 100    # average density
 	tau                    = 0.6    # collision timescale
@@ -49,7 +50,7 @@ def main():
 	
 	# Simulation Main Loop
 	for it in range(Nt):
-		print(it)
+		#print(it)
 		
 		# Drift
 		for i, cx, cy in zip(idxs, cxs, cys):
@@ -87,6 +88,7 @@ def main():
 			vorticity = (np.roll(ux, -1, axis=0) - np.roll(ux, 1, axis=0)) - (np.roll(uy, -1, axis=1) - np.roll(uy, 1, axis=1))
 			vorticity[cylinder] = np.nan
 			vorticity = np.ma.array(vorticity, mask=cylinder)
+			"""
 			plt.imshow(vorticity, cmap='bwr')
 			plt.imshow(~cylinder, cmap='gray', alpha=0.3)
 			plt.clim(-.1, .1)
@@ -96,11 +98,12 @@ def main():
 			ax.get_yaxis().set_visible(False)	
 			ax.set_aspect('equal')	
 			plt.pause(0.001)
+			"""
 			
 	
 	# Save figure
 	plt.savefig('latticeboltzmann.png',dpi=240)
-	plt.show()
+	#plt.show()
 	    
 	return 0
 
